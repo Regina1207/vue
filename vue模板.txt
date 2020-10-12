@@ -1,0 +1,44 @@
+ESLint：书写规范的检测，如果没有按照规则去写，则会给你报错
+注意：一但修改了全局的配置，必须重新启动服务器，否则失效
+解决bug:
+    1.看控制台
+    2.看服务器(黑窗口)
+
+template模板:
+    一个模板（.vue文件）中，有以下三个语言，包括template标签语法、
+    script的js语法、style的css语法
+    注意：
+        1、template必须的，其余js和style可以不要
+        2、顺序可以随意调换
+
+    template:只能有一个子元素，不允许存在多个子元素，除非你用判断条件
+    template模板只能解析data函数内的数据
+    {{}}：Mustache模板语法，以插值的方式进行绑定数据
+    template：一但发生嵌套，他就变成标签
+    jade（pug）
+
+     
+JS固定的写法：
+    钩子函数：其实就是一个内置的回调函数
+    虚拟DOM：就是没有真正的DOM解构
+    1.大部分的函数都写在 export default {} 对象内
+    2.变量全部集中管理在data函数中
+    3.name：当前组件的名字，可以通过跳转name进行跳转
+        可以写递归组件
+    4.methods：写普通函数的一个方法，名字是固定的不能改变
+    5.mounted：生命周期函数（生命周期钩子函数），自动执行
+        挂载中：此时，页面中有真实的DOM解构了，此时可以获取元素
+
+生命周期：
+    出生-少年-青年-中年-老年-死亡 创建挂载销毁
+
+git clone 地址
+vue—1909-younger
+cd  vue—1909-younger
+cnpm install：下载依赖
+npm run serve:启动服务
+
+router-link：也是组件
+    原理：就是a标签，通过锚点进行跳转，to属性的原理是 href
+router-view：路由组件
+

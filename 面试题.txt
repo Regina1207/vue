@@ -1,0 +1,127 @@
+1.vue优点？
+    答：
+        1、简单易上手
+        2、组件复用
+        3、渐进式框架
+        4、MVVM框架
+        5、数据驱动试图
+        6、虚拟DOM
+        7、数据双向绑定
+2.vue父组件向子组件传递数据？
+答：通过props
+3.子组件像父组件传递事件？
+答：$emit方法
+4.v-show和v-if指令的共同点和不同点？
+答：
+    v-show：加载了文档流，存在于document文档里面，控制css，display:none，
+    v-if：算法，逻辑算法（条件判断）
+
+6.<keep-alive></keep-alive>的作用是什么?
+答：缓存组件（保存状态），思想来源于服务端交互
+    优点：
+        1、只要组件加载过一次，就会进行缓存，后期就直接从缓存状态中获取
+           当前组件了，不用再去创建、挂载、更新等等
+        2、提高网页性能
+    属性：
+        1、include:指定你需要缓存的组件，以属性的方式用在keep-alive组件上
+                include：根据组件中name属性名进行缓存的
+        2、exclude:除了某些组件，其余全部缓存
+        3、max：最大缓存的组件数量，超出了就把那个经常不使用的、用的频率较少的组件替换了
+7.如何获取dom?
+答：ref="domName" 用法：this.$refs.domName
+8.说出几种vue当中的指令和它的用法？
+答：v-model双向数据绑定；
+    v-for循环；
+    v-if v-show 显示与隐藏；
+    v-on：绑定事件；
+    v-once: 只绑定一次。
+9. vue-loader是什么？使用它的用途有哪些？
+答：vue文件的一个加载器，将template/js/style转换成js模块。
+    用途：js可以写es6、style样式可以scss或less、template可以加jade等
+10.为什么使用key?
+答：需要使用key来给每个节点做一个唯一标识，Diff算法就可以正确的识别此节点。
+    作用主要是为了高效的更新虚拟DOM。
+11.axios及安装?
+答：请求后台资源的模块。npm install axios --save装好，
+    js中使用import进来，然后.get或.post。返回在.then函数中如果成功，失败则是在.catch函数中。
+
+13.请说出vue.cli项目中src目录每个文件夹和文件的用法？
+答：assets文件夹是放静态资源；components是放组件；router是定义路由相关的配置; app.vue是一个应用主组件；main.js是入口文件。
+14.分别简述computed和watch的使用场景
+答：computed:组件中的计算属性，有缓存值
+    watch：组件内部的监听属性，可以监听到props、data、路由跳转中数据
+    deep:true           深度监听        不经常使用
+    immediate:true      立即开启监听
+    如果给监听的变量添加''，就是精确监听（值监听当前的变量）
+15.v-on可以监听多个方法吗？
+答：可以，栗子：<input type="text" v-on="{ input:onInput,focus:onFocus,blur:onBlur, }">。
+16.$nextTick的使用
+    相当于Vue.prototype.$nextTick()：
+    作用：
+        等待真实DOM挂载到页面上才执行的方法，异步的方法
+        不管哪个生命周期阶段，this.$nextTick()只会在组件挂载中（mounted），一定是你调用完成render函数了
+
+mutations中如果写了异步代码有什么影响（出现什么问题）？
+    答案：
+        页面改变了，state中数据不会改变（UI表现和数据不一致：调试的时候）
+为什么vuex可以解决组件深层次数据传递问题？
+    答案：
+        因为每个组件都有一个$store对象，当前$store对象指向的实例是Vuex中的Store()
+        Store():全部的vuex属性、方法、数据等等都存在于其内部
+vue组件中data为什么是函数，而不是对象？
+    答案：
+        vue组件中data值不能为对象，因为对象是引用数据类型，组件可能会被多个实例同时引用
+        如果组件中的data值为对象时，将导致多个组件共享一个对象，其中一个组件改变data属性值，
+        其他将会受影响
+不同页面之间数据传递：
+        1.通过params，query
+
+filters():局部过滤器
+Vue.filter():全局过滤器
+directives:局部注册自定义指令
+Vue.directive()：全局注册自定义指令
+    全局注册自定义指令。第一个参数为指令名，第二个参数为回调函数，
+    回调函数里面有三个参数，分别：
+        el：当前绑定指令的元素
+        binding：相当于你动态传入的参数
+        vnode：当前元素的虚拟DOM（不常用）
+面试题：要想操作真实DOM元素
+    回答：
+        1、在mounted挂载中生命周期
+        2、nextTick()函数中操作
+        3、ref
+
+面试题：如果数据变化了，页面不更新怎么办？
+     回答： 
+        1、看数据是否是响应式的  如果不是通过 Vue.set()  this.$set()变成响应式数据
+        2、强制更新视图  $forceUpdate():强制调用render函数  【缺点：耗性能】
+
+vue组件有缓存怎么办？
+    this.$destroy():销毁缓存，让当前组件进入初始化状态  【不常用】
+axios:
+    原理：基于ES6中的Promise封装的
+    1、是单独的Promise库，用来进行前后端交互的（请求数据的）
+    2、axios不能使用Vue.use()进行全局使用（原因是axios内部没有install方法）
+    axios二次封装：
+        * 优点：
+        *    1、更适合我们的需求（更灵活）
+        *    2、自动帮助我们完成一些配置（开发成本降低）
+        *    3、提供更多的服务
+        *    4、可以按需引入到组件 
+        *    5、http请求集中管理（偏向于工程化）
+        * 思路：
+        *    1、封装公共的路径等等
+        *    2、封装请求拦截 （封装一些请求时，固定需要带到服务端的参数或者请求体）
+        *    3、封装响应拦截  (服务端传递给前端数据，前端进行拦截处理之后再使用)
+
+Angular1.x：2009年第一次在前端领域提出了MVC，直到Vue/React出来之后才有了MVVM设计模式
+    M：model（数据 data）   
+    V:view（试图 页面）  
+    C:Controller（控制输出页面）
+
+MVVM：（主动的MVC）
+    M：model（数据层）   
+    V:view（试图 页面）  
+    VM：ViewModel（控制器：controller）
+
+

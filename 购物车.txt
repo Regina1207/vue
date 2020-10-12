@@ -1,0 +1,38 @@
+
+
+购物车  
+
+布局：vant   专门写移动端的页面
+
+vue 
+
+axios 
+ 
+vant 
+
+vue-router
+
+vuex     
+
+以上四个都是  -S
+
+cnpm i 
+
+babel-plugin-import 开发时候才用的    -D
+
+vuex存放数据：
+    如果购物车已经有当前商品【不管是几个商品，则只让商品的数量+1】
+    如果购物车不存在当前商品，把当前商品的全部数据存在vuex中
+
+Vue.set():全局给某个对象添加一个属性,将当前属性变为响应式数据
+            直接通过object.xxx添加属性，vue无法追踪、监听，导致页面无法更新到最新数据
+this.$set():局部给某个对象添加一个属性,将当前属性变为响应式数据
+
+Vue.delete():全局删除响应式数据
+this.$delete():局部删除响应式数据
+
+
+    var obj = {}
+    Vue.set(obj,'name','zimo')
+    var arr = [];
+    Vue.set

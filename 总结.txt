@@ -1,0 +1,303 @@
+vue特点是什么？
+
+vue核心是什么？
+
+vue有哪些优点？
+
+    1.渐进式框架
+    2.数据驱动试图
+    3.数据双向绑定
+    4.偏向于UI（视图）
+    5.spa单页应用（适合做spa单页应用）
+
+        原理：
+        v-model:
+            1.v-on:input
+            2.v-bind:value
+
+
+vuex实现购物车：
+    购物车组件内的复选条件：
+        1.只要有一个单选没有选上，那么全选则不选
+        2.一个一个的选择商品，直到商品全部选择后，则全选也选
+        3.单选时，计算出单选的价格，全选时，计算全部购物车商品的总价
+
+
+任何数据都可以使用vuex进行管理（公共）
+
+vuex：
+    state：存储数据，数据仓库
+    mutations：修改state的唯一方法
+    actions：提交mutations，异步的（用户可操作的、定时器，回调函数）
+    getters：计算属性，有缓存值（基于组件中computed计算属性封装的）
+如果分模块：
+    modules：包含以上四个属性
+    namespaced：true   设置命名空间
+
+    如果分了模块：
+        state、getters确实分开了
+        mutations和actions暴露在vuex全局对象
+        如果方法重名了，设置命名空间
+
+shim、polyfill：作用就是优雅降级   (转换成浏览器支持的)
+    优雅降级：思想，柔和的方法，进行降级，让以前的和现在的都可以使用
+
+面试题：
+    vue数据双向绑定的原理：
+        注意：vue不兼容IE8及以下的浏览器（ES3中根本就没有这个Object.defineProperty()方法）
+            Object.defineProperty()在IE8及以下的浏览器不能shim(无法优雅降级 )
+        原理：
+            数据劫持，通过ES5中的Object.defineProperty()监听数据并且劫持数据
+            然后具体通过get、set把vue组件中的data数据拦截修改并转换成getter、setter
+            方法进行监听修改数据（响应式数据），当属性被访问、修改时，通过watcher桥梁（信息转换站）
+            通知组件进行变化，组件调用render进行更新页面
+
+            监听组件的数据，通过Observer告诉watcher数据的变化，在显示到页面
+            compile：可以解析指令，告诉视图变化
+            
+            watcher是Angela的corr，vue中的VM
+            obj监听的对象，'age'定义的属性名，描述
+            Object.defineProperty(obj,'age',{
+            属性描述符：描述age的值是否可修改、可配置、可删除、可新增
+            存取描述符：通过set、get方法设置（存储属性），获取（访问属性）
+                set:() => {}
+                get:() => {}
+        })
+        方法像：Vue.set(list,'aaa',100);
+
+    this.$nextTick()相当于Vue.prototype.$nextTick()：
+        作用：
+            等待真实DOM挂载到页面上才执行的方法，异步的方法
+            不管哪个生命周期阶段，this.$nextTick()只会在组件挂载中（mounted），一定是你调用完成render函数了，
+            this.$nextTick()里面可以操作真实的DOM元素
+            this.$nextTick(()=>{}) //组件
+            Vue.nextTick(()=>{})   //全局
+
+    要想操作真实DOM元素
+        回答：
+            1、在mounted挂载中生命周期
+            2、nextTick()函数中操作
+            3、ref
+
+    $ref:引用（转发）元素或者组件，可以通过ref获取当前元素及所有子元素的所有内容，
+        可以用在元素上或者组件标签上
+        命名：ref = "xxx"
+        获取：this.$refs.xxx
+        缺点：
+            操作真实DOM，非常耗性能
+
+
+
+    如果数据变化了，页面不更新怎么办？
+        回答：
+            1、看数据是否是响应式的，如果不是通过Vue.set()【全局】   this.$set()【组件】变成响应式数据
+            2、强制更新试图  this.$forceUpdate()：强制调用render函数（缺点：耗性能）
+
+    vue组件有缓存怎么办？
+        this.$destroy()：销毁缓存，组件还在，让当前组件进入初始化状态（不常用）
+        
+
+
+        var obj = {
+           
+        };
+        obj监听的对象，'age'定义的属性名，描述
+        Object.defineProperty(obj,'age',{
+            属性描述符：描述age的值是否可修改、可配置、可删除、可新增
+            存取描述符：通过set、get方法设置（存储属性），获取（访问属性）
+                set:() => {}
+                get:() => {}
+        })
+        方法像：Vue.set(list,'aaa',100);
+
+        function aaa(){
+            //停止不了
+            console.log(1111)
+        }
+        aaa()
+        var obj = {
+            name:'zimo'
+            set:(name)=>{
+                return '我是'+this.name;
+            }
+            get:()=>{
+                return this.name
+            }
+        }
+        obj.name    //zimo 我是zimo
+        obj['name'] //zimo 他是zimo
+        当我访问属性的时候，把当前对象进行监听并劫持，修改数据，在返回
+
+vue中组件分为两类、组件类型：
+    1、类组件：每个组件都有完整的功能，如：生命周期、data函数、实例【this】，有自己完整的功能
+    2、函数式组件：
+        概念：
+            就是一个普通函数，大大降低了一个组件渲染消耗过程，主要负责写UI和CSS
+            数据都是从父组件传递过来的，目前vue的版本直接可以解析props，不用声明
+            props属性
+        如何让一个组件变成函数式组件？
+            设置一个functional:true,默认值为true，属性即可
+        场景：展示型页面
+        1、无状态：自己组件内部不管理数据，也不操作数据
+        2、没有实例，没有this，没有生命周期，没有数据
+        3、只会解析一个props属性，目前自动解析
+        优点：
+            消耗非常少，只是执行了一个普通函数，渲染过程减少
+
+        $attrs:
+            以对象的方式接收父组件传递过来的所有数据，如果在组件中某个属性使用props进行接收了
+            则$attrs会自动剔除当前组件
+
+        this.$emit():只接收两个参数
+            只负责发送数据
+        this.on():
+            只负责接收参数
+            data为什么是函数，就是为了解耦，里面还是个对象，只不过是让函数包裹起来的对象
+            data(){
+                return {
+                    msg:'zimo'
+                }
+            }
+            Vue.prototype._data = {} == data()
+            Vue.prototype._data = {msg:''}
+        this.$off('send'):
+            解绑监听函数
+        watch:监听url路由、data数据、props
+            deep：true  深度监听
+            immediate：立即开启监听
+            data(){
+                return{
+                    num:100
+                }
+            }
+            watch：{
+                num(newValue,oldValue){
+
+                },
+                deep：true,
+                immediate：true
+            }
+        computed:计算属性，有缓存值
+    3、递归组件
+        概念：数据不确定嵌套多少层，使用vue中递归组件自动去渲染，如果有多少层数据
+            则展示多层结构【自动】，当前组件调用自身，根据name组件名进行调用
+        场景：左侧嵌套导航菜单，权限配置
+            父组件内引入递归子组件，通过绑定自定义属性传递数据（父传子）
+            子组件内接收，渲染，判断数据解构内是否有嵌套数据，如果有，则调用自身组件（通过name名调用）
+            如果没有则停止调用
+        注意：递归组件必须要有结束条件
+
+methods、watch、computed区别？
+
+
+
+this.$slots.default：
+    以一个数组的方式接收插槽内传递过来的所有对象
+    场景：
+        1、性能优化
+        2、父传子（间接）
+        3、多用于封装UI组件（常用）
+
+        父组件：
+            <template>
+                <div>
+                    <child>
+                        <div>头部</div>
+                        <div>内容</div>
+                        <div>尾部</div>
+                    </child>
+                </div>
+            </template>
+        子组件：child
+            <template>
+                <div v-if="this.$slots.default.length > 0">
+                    <slot></slot>
+                </div>
+            </template>
+
+
+filters():局部过滤器
+    有一个固定参数，此参数就是你要格式化的数据
+Vue.filter():全局过滤器
+    有一个固定参数，此参数就是你要格式化的数据，全局的，在当前的vue项目中任何地方都可以使用
+directives:局部注册自定义指令
+    局部注册自定义指令。第一个参数为指令名，第二个参数为回调函数，
+    回调函数里面有三个参数，分别：
+        el：当前绑定指令的元素
+        binding：相当于你动态传入的参数
+        vnode：当前元素的虚拟DOM（不常用）
+Vue.directive()：全局注册自定义指令
+    全局注册自定义指令。第一个参数为指令名，第二个参数为回调函数，
+    回调函数里面有三个参数，分别：
+        el：当前绑定指令的元素
+        binding：相当于你动态传入的参数
+        vnode：当前元素的虚拟DOM（不常用）
+
+        自定义指令场景：
+            封装日历组件的时候才使用（事件委托）
+
+
+
+Vue中diff算法：
+    打补丁：精细
+    diff算法原理：算法复杂度 0[n]  0[n^3]  
+        1、都是通过三层对比进行虚拟DOM的计算、替换等等，注意的是不能跨层对比
+        页面对比(html)、组件对比(component)、元素对比(element)
+
+        2、key:key一致，diff算法认为没有变化，无需更新，无需重新计算
+    function patch(oldVnode,Vnode){
+
+    }
+    patch()
+     1、如果oldVnode和newVnode一样，则直接return，无需再进行下去
+     2、diff算法检查key的变化         diff算法（打补丁） 
+     3、patch更新虚拟DOM              虚拟DOM
+     4、更新完之后patch通知render函数
+    
+React中diff算法：
+
+你的优点是什么？
+    1、我自己可以封装UI库
+        知识点：插槽、数据通信、动态绑定class、vue.Component()
+        install方法、require.context()
+        require.context('路径',true/false,/\.vue/)
+
+        发布到npm官网，可以开源
+        npm login
+        npm publish
+    2、axios二次封装，路由懒加载，vuex熟练使用
+    3、diff算法稍有了解、虚拟DOM
+        三层对比
+        key
+        patch(oldVnode,Vnode)
+
+        <div>zimo</div>
+        var obj = {
+            tag:'div',
+            key:'3',
+            children:'zimo'
+        }
+
+
+
+
+
+
+
+
+
+
+脏数据：开发项目的时候，从服务端请求数据代码全都没有错
+复习：
+    angular：脏检查，每过一段时间检查一下数据是否有变化，有变化了则调用一系列更新方法，
+            没有变化直接返回
+            时间轮询：定时器
+
+    vue数据双向绑定原理
+        数据劫持+发布订阅者设计模式，实现数据双向绑定，具体通过Object.defineProperty()
+        方法封装的，通过
+    
+第一件事：装环境node\git\vue\
+        浏览器的下载
+        去package.json去看
+        如果是新项目的话，会集体开会，开发周期是多少，配合的vue框架。。。。。

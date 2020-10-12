@@ -1,0 +1,389 @@
+Vue优点：
+    1、简单易上手 
+    2、组件复用
+    3、渐进式框架（只用Vue模板）
+    4、MVVM框架
+（最大的优点）
+    5、虚拟DOM （diff算法、key值）
+    6、数据驱动视图
+    
+    7、数据双向绑定   vue的特点
+
+MVVM：设计模式（28中设计模式中根本就没有MVVM设计模式）
+
+Angular1.x：2009年第一次在前端领域提出了MVC，直到Vue/React出来之后才有了MVVM设计模式
+    M：model（数据 data）   
+    V:view（试图 页面）  
+    C:Controller（控制输出页面）
+
+MVVM：（主动的MVC）
+    M：model（数据层）   
+    V:view（试图 页面）  
+    VM：ViewModel（控制器：controller）
+
+指令：
+    v-cloak:
+        解决花括号闪烁问题，原理是display:none;
+    v-if和v-show区别：
+        常用的是v-show（频繁的切换使用v-show，如果切换不多用v-if）
+        共同点：
+            都是控制元素显示/隐藏
+        不同点：
+            v-show：占文档流，控制css display属性
+            v-if：逻辑判断，不加载当前元素，不占文档流，
+    v-for:循环，用于循环DOM结构，用在template，数据的多少决定了循环的次数，循环自身及所有子元素
+        循环的元素必须要添加key值，为了安全，性能（不让循环过的元素再次循环，再次加载）
+        <li v-for="(item,index) in arr" : key="index">{{item}}</li>
+        index:索引
+        item：数据内容
+        key：唯一标识，减少再次循环
+    v-model：
+        用于input、文本框、复选框、select、文本域等
+        v-model的实现原理：
+            v-model只是一个语法糖
+            通过v-bind绑定输入框的 value值
+            通过v-on绑定了 input事件
+            通过input事件修改value值，然后看到了值得变化
+
+                <input v-model="xxx">
+                <input :value="xxx" @input="onChange">
+    v-slot：（指令）
+        用于配合插槽使用，具名和作用域插槽常使用
+        vue2.6.0以前使用的是slot-scope
+        vue2.6.0以后使用的是v-slot
+
+        slot-scope：可以用在普通标签上、template标签、组件上
+        v-slot：只能用在template标签、组件上 （vue2.6.0新增的）
+动态组件：
+    component：vue内置的动态组件
+        用于简单的tab切换（选项卡），用于缓存<component></component>
+        is属性，用于切换组件
+        一般和keep-alive配合使用
+组件缓存：
+    缓存组件，思想来源于前后端交互，缓存数据
+    keep-alive：vue内置组件
+    有三个属性：
+        1.include：指定缓存某几个组件
+        2.exclude：除了某组件，其余组件全部缓存
+        3.max：最多能缓存多少组件，如果缓存的组件超出了最大缓存，会把不常用的组件进行清除缓存
+
+Vue.set():全局设置一个响应式属性     （全局使用）
+this.$set()：局部设置一个响应式属性  （组件内部）
+
+Vue.delete()：全局删除某个响应式属性     （全局使用）
+this.$delete()：局部删除某个响应式属性   （组件内部）
+
+注册一个全局组件：
+    Vue.component('组件名'，当前组件对象)     全局注册
+    components：{'组件名'，当前组件对象}      局部注册
+
+修改（扩展）vue组件通过哪些方式？
+    mixins：接收多个mixins    mixins:[mixins1,mixins2]
+    extends：接收一个extends  extends:extends
+    extends>mixins>组件内部
+
+watch:
+    组件内部的监听属性，可以监听到props、data、路由跳转中数据
+    deep:true           深度监听        不经常使用
+    immediate:true      立即开启监听
+    如果给监听的变量添加''，就是精确监听（值监听当前的变量）
+    data(){
+        return{
+            num:100
+        }
+    }
+    watch:{
+        num(newValue,oldValue){
+            
+        },
+        deep:true
+    }
+
+按需加载：
+    babel-plugin-component,我们可以直接引入需要的组件，以达到减小项目体积的目的
+
+computed：
+    组件内部的计算属性，逻辑运算方法都写在这里
+    特点：
+        有缓存值
+    vuex中的getters基于组件中的computed封装的
+
+组件的生命周期（4个阶段）： 
+    优点：
+        1、变的可控性
+        2、明确分工（不同阶段干不同的构造）
+        3、可以提前加载数据，预加载，提高用户体验度
+    1、创建阶段
+    2、挂载阶段
+    3、更新阶段
+    4、销毁阶段
+    每个阶段都有两个当前组件的钩子函数（回调函数），自执行
+    经常使用的是：
+        mounted
+        created
+        
+    beforeCreate:组件创建前
+    created:组件创建后
+        1、可以请求服务端数据
+
+    beforeMount:组件挂载前
+    mounted:组件挂载中（已经有了真实DOM解构，可以获取元素且可以操作）
+        1、可以请求服务端数据
+        2、可以操作DOM、获取DOM
+        3、自执行
+    beforeUpdate:组件当前组件更新前
+    updated:当前组件更新后
+
+    beforeDestroy:组件销毁前
+    destroyed:组件销毁后 (销毁方法、定时器等等)
+
+不属于以上4个阶段内（独立的动态组件生命周期）：
+    动态组件：就是不固定的组件，你可以随时切换当前组件（选项卡）
+    activated:动态组件激活时调用的钩子函数
+            相当于正常组件的mounted钩子函数
+    deactivated:动态组件非激活状态时，调用的钩子函数
+            deactivated中卸载函数、定时器等等
+
+vue-router：
+    history：new HTML5History()
+    hash：   new HashHistory()
+    abstract：服务端使用，浏览器无法使用
+
+    mode的实现原理：
+        Switch(mode){
+            case 'history':
+                this._route = new HTML5Histroy()
+            case 'hash':
+                this._route = new HashHistroy()
+             case 'abstract':
+                this._route = new AbstractHistroy()
+            default:
+                this._route = new HTML5Histroy()
+        }
+
+声明式：router-link to属性   router-link就是a标签
+编程式：可以通过name、path进行跳转
+    $router:全部路由信息
+        {
+            options:{
+                mode:'history',
+                base:process.base_URL,
+                routes:[]
+            }
+        }
+    $route:当前路由信息
+    params：
+        参数，路径跳转，属于url，参与跳转，常用于分页、详情页等
+        获取：this.$route.options.xxx
+    query：
+        参数，不参与路径跳转，不属于url
+        获取：this.$route.query.xxx
+    注意：
+        编程式跳转时，如果使用path进行跳转，params是获取不到的，此时必须使用name进行跳转
+
+动态路由：
+    path:'/home/:info'
+    to='/home/456'
+    获取：this.$route.params.info
+
+vuex:
+    state:数据仓库，存储数据
+    mutations:唯一修改state的方式
+        payload:载荷
+        add(state,payload){
+            如果是个死数据，通过vue.set()变成响应式活的数据
+        }
+    actions:提交mutations，通过commit提交
+        context:vuex提供一个全局对象
+        ADD({commit},payload){
+            commit('add',payload)
+        }
+    getters:vuex中的计算属性，借用了vue组件中的computed的特点，有缓存值，必须返回（return）
+        totalNum(state){
+            return xxx
+        }
+
+
+辅助函数：
+    mapState：
+        映射数据到组件中去
+    mapGetters:
+        映射缓存值到组件中去
+    注意：
+        mapState和mapGetters在组件中的computed属性中使用
+    computed:{
+        ...mapState(['xxx']),
+        ...mapGetters(['xxx'])
+    }
+    mapMutations:
+        映射同步方法到组件中去
+    mapActions:
+        映射异步方法到组件中去
+    注意：mapActions和mapMutations方法都在methods属性中使用
+    methods:{
+        ...mapMutations(['xxx']),
+        ...mapActions(['xxx'])
+    }
+
+    new Vuex.Store({
+        modules:{
+            home,
+            money
+        }
+    })
+    export{
+        namespaced,
+        state,
+        mutations,
+        actions,
+        getters
+    }
+    如果分模块了，每个模块中的actions和mutations重名了，则在每个模块的返回值里面加上namespaced（命名空间）
+设置为true即可，在组件中，在辅助函数内加上模块名
+
+JS模块化：
+    AMD:RequireJS
+        define()定义模块
+        特点：
+            依赖前置，异步加载
+            全部加载，浏览器支持使用
+            暴露：return{}
+        引入define、require、RequireJS
+    CMD:SeaJS
+        define()定义模块
+        特点：
+            按需加载，异步加载
+            没有前置依赖，就近原则
+            暴露：module.exports={}
+        引入seajs.use(['./a'],function(a){})
+    CommonJS:Node.js
+        module.export = {}定义模块
+        特点：
+            同步执行
+            浏览器不能使用
+            按需加载
+            用于服务端
+        引入：require('./xxx')
+    ES6 Module：import
+        module.exports = {} 定义模块
+        引入：
+            import xxx from 'xxx';
+
+如果：
+    定义(暴露)：
+        export{
+            a,b,c
+        }
+    引入：
+        1.import {a,b,c} from './xxx';
+        2.import * as types from './xxx';
+如果：
+    定义(暴露)：
+        export default xxx ；
+    引入：
+        import xx from 'xxx'
+
+let const 
+ES6新语法：
+let：
+    概念：命名变量的
+    1.一但声明，就不能再进行修改了
+    2.暂时性死区
+    3.不存在变量提升（var存在变量提升）
+    4.独立的作用域（减少闭包的使用）
+const：
+     概念：命名常量的
+    1.一但声明，就不能再进行修改了
+    2.暂时性死区
+    3.不存在变量提升
+    4.独立的作用域（减少闭包的使用）
+
+...:扩展运算符（展开运算符）（数组降为扩展运算符）
+    1.解构一层数据结构
+    2.只能用在引用数据类型中（基本数据类型用不了）
+    3.在函数中使用为参数时，只能是最后一个参数，用于收集额外的实参（通过一个集合进行收集，也就一个数组，arguments也是收集实参的）
+
+箭头函数：
+    1.简化了普通函数写法
+    2.没有arguments对象
+    3.没有this，借用的是当前环境的上下文（直接父级的this）
+    4.不能被实例化，不能作为构造函数
+    5.如果没有参数，不能省略小括号，如果有一个参数，可以省略小括号，多个参数不能省略小括号
+    6.箭头函数中如果只有一行函数体，则省略大括号和return
+    7.箭头函数如果类似const add = (a,b)=>(a+b);则=>之后的‘()’其实是包含了return一个内部对象
+        解析：   const add= (a,b)=>{
+                    return {
+                        sum:a+b
+                    }
+                }
+    8.没有prototype对象
+
+插槽： 
+        匿名插槽：
+            如果子组件的slot标签内有默认数据，而且父组件内的子组件标签内没有内容，
+            则显示子组件slot标签内的默认内容，如果父组件内的子组件标签内有内容，则
+            显示当前内容
+        具名插槽：（有名字的插槽）
+            1.v-slot这个指令必须用在组件标签上或者template上
+            2.v-slot:插槽名，子组件内的slot得指定name属性（插槽名）
+            3.如果匿名插槽和具名插槽配合使用，匿名插槽会自动的去查找那个没有名字的slot
+            使用场景：
+                控制子组件中显示不同的内容（动态）
+        作用域插槽：
+            概念：同样的数据，显示不同的样式
+
+            1.slot-scope：以前的vue版本使用的，slot-scope接收子组件传过来的数据
+            2.slot-scope可以用在普通元素标签上，也可以用在template标签上
+            3.v-slot：只能用在template标签上或者组件自身上，用于接收子组件传递过来的数据
+            4.必须是子组件的数据以属性的方式传递到父组件内
+
+            scope：是作用域的意思
+
+vue组件通信：
+    1.父传子：
+        父组件中通过自定义属性（v-bind绑定）的方式给子组件传递数据
+        子组件通过props接收，可以使用数组接收，可以使用对象接收（判断类型，效验，是否必传等）
+        注意：如果父组件传递的是引用数据类型，子组件中的props以对象的方式接收数据，如果设置默认，
+            那么，你得通过一个函数去返回一个默认值
+    2.子传父：
+        1.作用域插槽
+            子组件通过自定义属性的方式在slot标签上传递数据
+            父组件在引入的子组件内部通过slot-scope或者v-slot以对象的方式接收子组件的数据
+        2.$emit()发送传递数据
+            子组件发送数据，通过$emit()，父组件的methods方法内定义接收数据的函数，传递形参，然后赋值即可
+            如果需要自动去发送数据并且接收数据，需要在子组件内的created，beforMound
+            mounted中发送数据即可
+            父组件中绑定自定义函数名($emit()函数的第一个参数)
+
+            整体过程：
+                父级组件调用了子组件内的回调函数
+
+            $emit()只负责发送出去，接收两个参数，第一个参数是一个回调函数名，第二个参数是要传递的数据  
+    3.同级组件：
+        1.子传父，父传子  例如：A传父组件，父组件传B
+        2.事件总线（中间转换站：解决了层层传递的问题），任何组件之间都可以传递数据
+            发送数据的组件，通过$emit()发送数据
+            接收数据的组件通过$on()接收数据
+
+            $on()：只负责接收数据，第一个参数为$emit()的第一个参数，第二个参数为回调函数，
+                    此回调函数接收一个形参(注意：this问题)
+        3.本地存储
+        4.路由传参（不太适用）
+
+        在需要发送数据的组件里面是有$emit()进行发送即可
+        在需要接收函数据的组件里通过$on()进行接收即可（this的问题，监箭头函数可以截取）
+    4.不同页面之间数据传递：
+        1.通过params，query
+        2.生命周期配合$emit,$on实现
+            旧组件等新组件挂载之前可以发送数据
+            新组件等旧组件销毁之后才可以接收数据
+
+            可以发送数据的生命周期函数：
+                destoryed
+                beforeDestory
+            可以接受数据的生命周期函数：
+                beforeMount
+                created
+                beforeCreate
+                
+             $off('发送数据的监听函数'):解绑发送数据的监听函数，先解绑在发送

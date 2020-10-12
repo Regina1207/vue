@@ -1,0 +1,12 @@
+extend：可以通过Vue.extend创建子集【vue实例】,写单独的组件【复用】
+extends：可以重构vue组件内部的生命周期、data数据、方法等[对组件的扩展]
+mixins：混合，可以重构vue组件内部的生命周期、data数据、方法等[对组件的扩展]
+        可以接收多个，entends只能接收一个
+结论：
+    优先级：extend>extends>mixins>组件内部
+    1.Vue构造器和Vue创建的实例，没有优先级关系，页面内可以存在多个Vue实例
+    2.extends：继承，可以修改原有的vue组件选项，extends>组件内部
+        【普通方法如果函数名字和组件内部函数名一样，则vue组件内部的函数会覆盖extends内部的函数】
+    3.mixins：混入，可以修改原有的vue组件选项，extends>组件内部
+        【普通方法如果函数名字和组件内部函数名一样，则vue组件内部的函数会覆盖extends内部的函数】
+

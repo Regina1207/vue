@@ -1,0 +1,106 @@
+hash和history及abstract区别：
+    history：跳转路径时，页面每次需要和服务端进行交互，服务端返回最新的页面给前端，前端展示
+    hash：每次跳转，页面不和服务端进行交互（真正的锚点跳转）
+    abstract：用于node环境中的路由跳转，浏览器无法使用
+
+注意：
+    需要跳转：得去router文件夹内注册路由信息
+    如果不需要跳转，只是组件嵌套，则不需要注册路由信息
+
+开发完成之后，需要打包（压缩，混淆）
+命令：npm run build
+
+在ES6语法规定：
+    一个函数只有一行函数体的时候，可以省略大括号，还有return
+    
+vue-router:
+    不是vue中的组件（和vue没有关系），后期才开发出来用于路由跳转
+
+    第三方库：vue-router，专门为vue开发出来的路由跳转
+    
+    有三种跳转方式：
+        以下三种跳转方式都可以手动切换，改mode字段即可
+            history：最正常的跳转方式,把HTML5中的HTML5History进行了封装
+                www.baidu.com/index/page/income
+            hash：全称：hashHistory
+                www.baidu.com/#/index/page/income
+            abstract：（浏览器端无法使用）
+
+            router文件夹下面：
+                所有的路由信息都被管理在一个数组里面
+                index.js:以对象的方式配置管理单个组件的路由信息
+                组件的路由信息配置：
+                    path:'路径'   必须要配置的
+                    component:'接收import语法引入的组件'
+                    name:'组件名'  可省略（特殊跳转，必须传）
+                组件内：
+                    router-link是vue-router的内置组件，
+                    原理就是创建a标签，通过a标签内的href进行跳转（锚点）
+                    to其实就是href，to:'传路由信息中的path'  必须保持一致
+                    
+                    router-view:vue-router的内置组件，
+                    用于路由跳转时，显示当前组件的容器，可以多处使用
+
+        设置默认路由：
+            redirect：重定向
+                    1.一定是设在当前路由的直接上级路由信息内
+                    2.必须是全路径
+
+
+
+
+                    
+地址栏里面的url由以下几部分组成：
+    域名：协议，域名，子域名，端口号
+    域名后面跟的是路径
+    www.junmoxiao.com/vuecms/index?page==xxx
+    params：参与跳转的参数叫做params
+
+    vuecms其实就是params
+
+    vuecms:路径
+    index：路径
+    ?page==xxx：参数，不是真正的url，不参与跳转
+
+    ？后面的参数叫做query
+    query其实就是不参与
+
+$router:所有的路由信息
+$route:当前组件的路由信息
+共同点：
+    1.query，params都是参数，然后后台返回给前端不同的数据
+    2.都可以动态传参
+    3.可以一块组合传递参数
+
+params：
+    在路由配置信息中写动态的参数  例如：path '/page/:id',:id就是动态的params
+    在跳转到的那个组件内可以获取params
+    获取：this.$route.params.xxx
+
+query：
+    不是url，不参与跳转，主要是给后台传递参数，也可以根据这个query参数，返回给前端不同的数据
+
+编程似的导航：
+    1.如果传递params参数，跳转时必须使用name进行跳转，否则获取不到params（无效），query是正常使用
+        是用path进行跳转，只能正常使用query参数
+    2.params和query同时或者单个传递，使用name跳转，全部正常使用
+
+面试题：什么时候必须得通过name属性跳转？
+    答案：使用编程式导航时，进行传递params参数时，通过name进行跳转，否则无效
+
+
+路由守卫：路由拦截
+    全局路由钩子：写在index.js    常用
+        前置守卫（常用）：参数全部固定
+	        beforeEach((to,from,next)=>{})
+	        to:你即将要去的路由信息对象   num1
+	        form:你从哪里来的路由信息      home
+	        next:回调函数，可以放行
+			        next( )相当于放行了
+	        举例：
+			        b：to对象
+			        a：from对象
+			        a->b
+	    后置守卫：
+    组件内路由钩子：写在.vue组件内的
+    路由独享钩子：写在路由配置对象上的

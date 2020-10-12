@@ -1,0 +1,128 @@
+vuex讲解：(状态【数据】管理工具)
+    存在意义：
+        1、数据集中管理 （公共数据）
+        2、数据共享 
+    特点：
+        1、单向数据流
+        2、数据共享
+    优点：
+        1、单向数据流 
+        2、数据共享
+        3、集中管理数据
+        4、易于后期维护
+        5、易于测试
+        6、状态管理更简单
+        7、解决了复杂（深层嵌套的组件）的组件之间的通信
+    缺点：
+        1、增加了开发成本（写的代码多了）
+
+    state: 专门存放数据的仓库
+    mutations:同步方法（用户不能直接出发），修改state必须通过mutations,mutations是纯函数
+    actions:提交mutations
+    getters:vuex中的计算属性
+
+    modules:分模块去管理仓库
+
+
+    使用方式：
+        1、要想改变state中数据，必须通过mutations （Vue才能监听、跟踪、调用render函数触发组件更新）
+           mutations:同步的（用户不能操作同步代码）
+        2、通过actions提交 （commit） mutations
+
+        3、actions通过dispatch派发到组件内部去调用
+
+
+        在组件中如何调用vuex中的方法：
+            在组件中使用state数据:$store.state.xxx
+            在组件中调用mutations:$store.commit('mutations中的方法名')
+            在组件中调用actions:$store.dispatch('actions中的方法名')
+
+        对于开发者来说，一些同步的代码无需用户触发了才去请求
+        需要用户触发的操作，必须使用actions去派发
+
+
+    vuex中每个API都有一个自己的辅助函数
+    
+      辅助函数：
+        就是打辅助，是vuex中的语法糖，帮助我们开发者简化了在组件中
+        操作vuex的代码
+
+        state:     mapState         简化了$store.state
+        mutations: mapMutations     简化了$store.commit()
+        actions:   mapActions       简化了$store.dispatch()
+        getters:   mapGetters       简化了$store.getters   
+
+      在组件中使用辅助函数：
+        mapState 只能在组件的 computed属性中使用   ...mapState(['数据'])
+        mapGetters 只能在组件的 computed属性中使用   ...mapGetters(['数据'])
+
+        mapMutations 只能在组件的 methods属性中使用   ...mapMutations(['mutations方法'])
+        mapActions 只能在组件的 methods属性中使用   ...mapActions(['actions方法'])
+
+        getters:
+            计算、监听属性，必须要有返回值（必须要return）,会把计算出来的结果进行缓存，
+            避免多次调用getters
+
+        修改state通过mutations
+
+        计算state通过getters
+
+        组件中的计算属性：computed
+        vuex中的计算属性：getters
+
+    vuex中的store本质就是没有template的模板的vue组件；
+
+面试题：mutations中如果写了异步代码有什么影响（出现什么问题）？
+
+      答案：页面改变了，state中数据不会改变（UI表现和数据不一致：调试的时候）
+
+如果分模块了：
+    vuex:状态（数据）管理工具
+    原先vuex中有个num，你分的模块叫做home，
+    那么你在组件中得通过$store.state.home.xxx去获取数据 
+
+    actions、mutations、getters不用变化，原来的方法即可
+
+为什么vuex可以解决组件深层次数据传递问题？
+    答案：因为每个组件都有一个$store对象，当前$store对象指向的实例是Vuex中的Store()
+
+    Store():全部的vuex属性、方法、数据等等都存在于其内部
+
+    state、actions、mutations、getters
+
+面试题：vue组件中data为什么是函数，而不是对象？
+vue组件中data值不能为对象，因为对象是引用类型，组件可能会被多个组件同时引用。
+如果data值为对象，将导致多个组件共享一个对象，其中一个组件改变data属性值，
+其它实例也会受到影响。
+上面解释了data不能为对象的原因，这里我们简单说下data为函数的原因。
+data为函数，通过return 返回对象的拷贝，致使每个组件都有自己独立的对象，
+组件之间可以互不影响的改变data属性值。
+
+作业:CommonJS 和 ES6 Module区别?
+
+
+vuex分模块管理数据（公共），除了state分模块了，其余actions、mutations
+getters 都暴露在了vuex全局环境
+
+$store.state.home.xxx
+$store.state.home.loop.xxx
+
+$store.commit() 
+$store.dispatch()
+
+如果vuex分模块后，方法起冲突（不同模块之间的方法名重复），应该这是单独
+的命名空间,设置namespaced:true （命名空间） 
+    代码实现：
+        vuex中：设置 namespaced:true ，然后需要暴露出去
+        组件中：mapActions('模块名',{}) 
+
+
+beforeunload：原生JS中浏览器跳转、刷新、更新等操作的监听方法
+onunload：浏览器解析完页面所有的数据出发的监听函数
+
+
+vuex没有持久化，得需要配合本地存储（localStorage、sessionStorage）
+使用或者vuex-persistedstate插件实现持久化
+
+
+

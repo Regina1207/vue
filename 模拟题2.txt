@@ -1,0 +1,216 @@
+51、全局、局部过滤器是哪些？
+    filters():局部过滤器
+    Vue.filter():全局过滤器
+
+52、全局、局部注册自定义指令？
+    Vue.directive()：全局注册自定义指令
+    directives:局部注册自定义指令
+    局部注册自定义指令。第一个参数为指令名，第二个参数为回调函数，
+    回调函数里面有三个参数，分别：
+        el：当前绑定指令的元素
+        binding：相当于你动态传入的参数
+        vnode：当前元素的虚拟DOM（不常用）
+
+53、mutations中如果写了异步代码有什么影响（出现什么问题）？
+    页面改变了，state中数据不会改变（UI表现和数据不一致：调试的时候）
+
+57、说一下你对MVVM的理解？
+    M:model（数据层）   
+    V:view（试图 页面）  
+    VM：ViewModel（控制器：controller）
+
+58、插槽有哪些？
+    匿名插槽：
+        显示子组件slot标签内的默认内容，如果父组件内的子组件标签内有内容，则
+        显示当如果子组件的slot标签内有默认数据，而且父组件内的子组件标签内没有内容，
+        则前内容
+    具名插槽：（有名字的从插槽）
+        1、v-slot指令必须用在组件标签上或者template上
+        2、v-slot:插槽名，子组件内的slot得指定name属性（插槽名）
+        3、如果匿名插槽和具名插槽配合使用，匿名插槽会自动的去查找那个没有名字的slot
+        使用场景：
+            控制子组件中显示不同的内容（动态）
+    作用域插槽：   
+        概念：同样的数据，显示不同的样式
+        1、slot-scope:以前的vue版本(2.9.6)使用的，slot-scope接收子组件传递过来的数据
+        2、slot-scope可以用在普通元素标签上，也可以用在template标签上
+        3、v-slot：只能用在template标签上或者组件自身上，用于接收子组件传递过来的数据
+        4、必须是子组件的数据以属性的方式传递到父组件内
+
+59、生命周期分为哪几个阶段？
+    beforeCreate:组件创建前
+    created:组件创建后
+        1、可以请求服务端数据
+    beforeMount:组件挂载前
+    mounted:组件挂载中（已经有了真实DOM解构，可以获取元素且可以操作）
+        1、可以请求服务端数据
+        2、可以操作DOM、获取DOM
+        3、自执行
+    beforeUpdate:组件当前组件更新前
+    updated:当前组件更新后
+    beforeDestroy:组件销毁前
+    destroyed:组件销毁后 (销毁方法、定时器等等)
+
+60、全局、局部注册一个动态组件？
+    vue.component 全局注册一个动态组件
+    components：局部注册一个动态组件。            状态管理工具
+
+61、vue的两个核心点
+    数据驱动、组件系统
+    数据驱动：ViewModel，保证数据和视图的一致性。
+    组件系统：应用类UI可以看作全部是由组件树构成的。
+
+62、第一次页面加载会触发哪几个钩子？
+    beforeCreate， created， beforeMount， mounted
+
+63、vuex有哪几种属性？
+    有五种，分别是 State、 Getter、Mutation 、Action、 Module
+
+64、Vue.js中ajax请求代码应该写在组件的methods中还是vuex的actions中？
+    不被其他组件公用，就不需要放入vuex 的state里。
+    如果被其他地方复用，放入actions里，方便复用。
+
+65、keep-alive:
+    缓存组件（保存状态），思想来源于服务端交互
+    优点：
+        1、只要组件加载过一次，就会进行缓存，后期就直接从缓存状态中获取
+           当前组件了，不用再去创建、挂载、更新等等
+        2、提高网页性能
+    属性：
+        1、include:指定你需要缓存的组件，以属性的方式用在keep-alive组件上
+                include：根据组件中name属性名进行缓存的
+            语法：
+            1、正则表达式写法 :include="/comA|comC/"
+            2、数组形式 :include="['comA','comC']"  常用
+            3、字符串形式（逗号隔开）  include="comA,comC" 不常用
+        2、exclude:除了某些组件，其余全部缓存
+        3、max：最大缓存的组件数量
+            把那个经常不使用的、用的频率较少的组件替换了
+
+66、delete和Vue.delete删除数组的区别
+    delete只是被删除的元素变成了 empty/undefined 其他的元素的键值还是不变。
+    Vue.delete 直接删除了数组 改变了数组的键值。
+
+67、params和query的区别
+    用法：query要用path来引入，params要用name来引入，接收参数都是类似的，
+    分别是this.$route.query.name和this.$route.params.na    me。
+    url地址显示：query更加类似于我们ajax中get传参，params则类似于post，
+    说的再简单一点，前者在浏览器地址栏中显示参数，后者则不显示
+    注意点：
+        query刷新不会丢失query里面的数据，params刷新会丢失params里面的数据。
+
+68、$route 和 $router 的区别
+    $router是VueRouter的实例，在script标签中想要导航到不同的URL,使用$router.push方法。
+    返回上一个历史history用$router.to(-1)
+    $route为当前router跳转对象。里面可以获取当前路由的name,path,query,params等。
+
+69、vue-router的两种模式
+    hash模式：即地址栏 URL 中的 # 符号；
+    history模式：window.history对象打印出来可以看到里边提供的方法和记录长度
+    
+70、vue-router实现路由懒加载（ 动态加载路由 ）
+    答:三种方式
+        第一种：vue异步组件技术 ==== 异步加载 
+        第二种：路由懒加载(使用import)。
+        第三种：webpack提供的require.ensure()
+
+71、vue的生命周期是什么？
+    vue每个组件都是独立的，每个组件都有一个属于它的生命周期，
+    从一个组件创建、数据初始化、挂载、更新、销毁，这就是一个组件所谓的生命周期。
+
+72、vue生命周期的作用是什么?
+    它的生命周期中有多个事件钩子，让我们在控制整个Vue实例的过程时更容易形成好的逻辑。
+
+73、5.created和mounted的区别？
+    created:在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图。
+    mounted:在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
+
+74、vue-router 是什么?它有哪些组件？
+    <router-link :to='' class='active-class'>   //路由声明式跳转 ，active-class是标签被点击时的样式
+    <router-view>        //渲染路由的容器
+    <keep-alive>         //缓存组件
+
+75、active-class 是哪个组件的属性？
+    active-class 属于vue-router的样式方法，当router-link标签被点击时将会应用这个样式
+
+76、axios:
+    原理：基于ES6中的Promise封装的
+    1、是单独的Promise库，用来进行前后端交互的（请求数据的）
+    2、axios不能使用Vue.use()进行全局使用（原因是axios内部没有install方法）
+    axios二次封装：
+        * 优点：
+        *    1、更适合我们的需求（更灵活）
+        *    2、自动帮助我们完成一些配置（开发成本降低）
+        *    3、提供更多的服务
+        *    4、可以按需引入到组件 
+        *    5、http请求集中管理（偏向于工程化）
+        * 思路：
+        *    1、封装公共的路径等等
+        *    2、封装请求拦截 （封装一些请求时，固定需要带到服务端的参数或者请求体）
+        *    3、封装响应拦截  (服务端传递给前端数据，前端进行拦截处理之后再使用)
+
+77、react
+    React 是一个用于构建用户界面的 JAVASCRIPT 库。
+    React 主要用于构建UI，很多人认为 React 是 MVC 中的 V（视图）。
+    React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它。
+    特点：
+        声明式设计：功能分模块了，很清晰，专事专做
+        高效：虚拟DOM，不操作DOM，数据驱动
+        组件系统：每个功能都可以是一个模块
+        灵活：可以和任何框架或者插件配合使用，没有很多规则
+        JSX语法：是JS语法的扩展，浏览器解析速度更快、更安全（不是必须的，可以不使用它）
+        单向数据流：从上到下传递数据，便于维护、使用简单
+
+78、
+    规则：
+        1、组件名必须大写
+        2、class写类名换成className
+        3、onClick  C必须大写
+            注释：{/*注释内容*/}
+    react-dom:解析JSX语法（解析JSX组件），可以渲染真实DOM到页面中（Vue中的reader）
+    react-router-dom:路由跳转
+    redux:相当于vuex，状态管理，数据管理（公共的数据）
+    react-redux:融合react和redux，使其成为一个整体     共同的父级（react、redux）
+
+79、创建组件的方式？
+        1、createClass({})  较老的写法，目前不怎么使用了
+        2、class配合React中Component创建 
+
+80、react中的state和props的区别？
+    props：一般用于父组件向子组件通信，在组件之间通信使用。props中的是属性
+    state：一般用于组件内部的状态维护，更新组建内部的数据，状态，更新子组件的props,state中的是数据
+
+81、setState()函数为什么是异步的，作用是什么？有什么参数？
+    setState函数式修改state的唯一方法，异步函数，接收两个参数
+        1、{}用来修改数据
+        2、回调函数，就相当于vue组件内的nextTick()函数，
+            永远是等有真是DOM了，操作真实的DOM元素，可以省略，用的不多
+            //排队，等待GUI渲染完成，必须是异步【有真实DOM】
+
+82、createClass和class创建组件的区别？
+    区别1. 构造函数
+        在React.createClass({})中，是不用写构造函数并且传入props再调用super(props)的，
+        而在ES6中类的构造函数需要接受props作为参数并调用方法。
+
+    区别2. 初始化状态
+        React.createClass({})中需要书写方法getInitialState来对状态进行初始化，
+        而在ES6语法中，这些都可以放在构造函数内完成。
+
+    区别3. 函数绑定
+        我们虽然可以使用ES6语法来定义一些事件方法，但是可惜的是，
+        这些我们定义在class中的方法并没有自动绑定到我们希望的对象上，
+        换句话说，就是函数作用域内的this的指向不对。 可以看这样一个简单的组件。
+
+
+浏览器的兼容性：
+    阻止事件的冒泡：
+        标准：stopPropagation()
+        IE：cancelBubble()
+    绑定解除事件的监听：
+        标准：addEventListener(type,callback)
+            removeEventListener(type,callback)
+        IE:attchEvent('on' +type,callback)
+            detachEvent('on' +type,callback)
+        *type是触发方法：callback是触发函数
+    获取css样式：
+        标准：
